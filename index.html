@@ -4,9 +4,46 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>To Do List</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+  <style>
+    [v-cloak] {
+      display: none
+    }
+    .complete {
+      color: #999;
+      text-decoration: line-through;
+    }
+  </style>
 </head>
 <body>
-  
+  <main id="app" class="container">
+    <div class="row justify-content-center">
+      <div class="col col-md-6">
+        <h1 class="display-4 mt-3">To Do List</h1>
+        <ul class="list-group mt-3" v-cloak>
+          <li class="list-group-item d-flex justify-content-between align-items-center" v-for="(item, index) in items" @click.self="checkItem(index)" :class="{complete: item.complete}" :key="index">
+            {{ item.title }}
+            <button class="btn btn-danger" @click="removeItem(index)"><i class="fas fa-trash-alt"></i></button>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col col-md-4">
+        <div class="card mt-5">
+          <div class="card-header">Add an Item</div>
+          <div class="card-body">
+            <form @submit.prevent="addItem()">
+              <input type="text" class="form-control" placeholder="Item" v-model="item">
+              <button type="submit" class="btn btn-secondary btd-block mt-3">Add Item</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script src="app.js"></script>
 </body>

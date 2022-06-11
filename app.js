@@ -1,7 +1,6 @@
 const app = Vue.createApp({
   data: function () {
     return {
-      item: '',
       items: [
         {
           title: 'Buy Milk',
@@ -11,25 +10,37 @@ const app = Vue.createApp({
           title: 'Clean Room',
           complete: true
         }
-      ]
+      ],
+      item: ''
     }
   },
-  mounted: function () {
-    if (localStorage.getItem('items')) {
-      this.items = JSON.parse(localStorage.getItem('items'))
+  created: function () {
+    const items = localStorage.getItem('items')
+
+    if (items) {
+      this.items = JSON.parse(items)
     }
   },
-  watch: {
-    items: {
-      deep: true,
-      handler: function () {
-        this.updateLocalStorage()
-      }
+  computed: {
+    remaining: function () {
+      // get all incomplete items 
+      // const incomplete = this.items.filter(
+      //   item => item.complete === false
+      // )
+
+      // // count the incomplete items
+      // return incomplete.length 
+
+      return this.items.filter(item => !item.complete).length
     }
   },
   methods: {
     addItem: function () {
-      this.items.push({ title: this.item, complete: false })
+      this.items.push({
+        title: this.item,
+        complete: false
+      })
+
       this.item = ''
     },
     checkItem: function (index) {
@@ -37,14 +48,14 @@ const app = Vue.createApp({
     },
     removeItem: function (index) {
       this.items.splice(index, 1)
-    },
-    updateLocalStorage: function () {
-      localStorage.setItem('items', JSON.stringify(this.items))
     }
   },
-  computed: {
-    remaining: function () {
-      return this.items.filter(item => !item.complete).length
+  watch: {
+    items: {
+      deep: true,
+      handler: function (items) {
+        localStorage.setItem('items', JSON.stringify(items))
+      }
     }
   }
 })
